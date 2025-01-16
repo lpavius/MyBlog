@@ -3,6 +3,7 @@ package org.wildcodeschool.myblog.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Article {
@@ -26,6 +27,14 @@ public class Article {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @ManyToMany
+    @JoinTable(
+            name = "article_image", // Nom unique de la table de jointure
+            joinColumns = @JoinColumn(name = "article_id"), // Clé étrangère vers Article
+            inverseJoinColumns = @JoinColumn(name = "image_id") // Clé étrangère vers Image
+    )
+    private List<Image> images;
 
     public Long getId() {
         return id;
@@ -73,5 +82,13 @@ public class Article {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
     }
 }
