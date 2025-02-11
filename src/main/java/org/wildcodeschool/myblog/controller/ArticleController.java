@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.wildcodeschool.myblog.dto.ArticleAuthorDTO;
 import org.wildcodeschool.myblog.dto.ArticleDTO;
-import org.wildcodeschool.myblog.dto.AuthorDTO;
 import org.wildcodeschool.myblog.model.*;
 import org.wildcodeschool.myblog.repository.*;
 
@@ -208,6 +207,11 @@ public class ArticleController {
         Article article = articleRepository.findById(id).orElse(null);
         if (article == null) {
             return ResponseEntity.notFound().build();
+        }
+        if (article.getArticleAuthors() != null) {
+            for (ArticleAuthor articleAuthor : article.getArticleAuthors()) {
+                articleAuthorRepository.delete(articleAuthor);
+            }
         }
         articleRepository.delete(article);
         return ResponseEntity.noContent().build();
