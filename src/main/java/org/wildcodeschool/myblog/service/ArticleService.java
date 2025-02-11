@@ -36,13 +36,11 @@ public class ArticleService {
         this.articleAuthorRepository = articleAuthorRepository;
     }
 
-    @GetMapping
     public List<ArticleDTO> getAllArticles() {
         List<Article> articles = articleRepository.findAll();
         return articles.stream().map(articleMapper::convertToDTO).collect(Collectors.toList());
     }
 
-    @GetMapping("/{id}")
     public ArticleDTO getArticleById(@PathVariable Long id) {
         Article article = articleRepository.findById(id).orElse(null);
         if (article == null) {
@@ -51,7 +49,6 @@ public class ArticleService {
         return articleMapper.convertToDTO(article);
     }
 
-    @PostMapping
     public ArticleDTO createArticle(@RequestBody Article article) {
         article.setCreatedAt(LocalDateTime.now());
         article.setUpdatedAt(LocalDateTime.now());
@@ -96,7 +93,6 @@ public class ArticleService {
         return articleMapper.convertToDTO(savedArticle);
     }
 
-    @PutMapping("/{id}")
     public ArticleDTO updateArticle(@PathVariable Long id, @RequestBody Article articleDetails) {
         Article article = articleRepository.findById(id).orElse(null);
         if (article == null) {
@@ -169,7 +165,6 @@ public class ArticleService {
         return articleMapper.convertToDTO(updateArticle);
     }
 
-    @DeleteMapping("/{id}")
     public boolean deleteArticle(@PathVariable Long id) {
         Article article = articleRepository.findById(id).orElse(null);
         if (article == null) {
@@ -180,7 +175,6 @@ public class ArticleService {
         return true;
     }
 
-    @GetMapping("/search-content")
     public List<ArticleDTO> getArticlesByContent(@RequestParam String content) {
         List<Article> articles = articleRepository.findByContentContaining(content);
         if (articles == null) return null;
@@ -188,14 +182,12 @@ public class ArticleService {
 
     }
 
-    @GetMapping("/search-created")
     public List<ArticleDTO> getArticlesCreateAfter(@RequestParam LocalDateTime date) {
         List<Article> articles = articleRepository.findAllByCreatedAtAfter(date);
         if (articles == null) return null;
         return articles.stream().map(articleMapper::convertToDTO).collect(Collectors.toList());
     }
 
-    @GetMapping("/top5")
     public List<ArticleDTO> getFiveLastArticles() {
         List<Article> articles = articleRepository.findTop5ByOrderByCreatedAtDesc();
         if (articles == null) return null;
