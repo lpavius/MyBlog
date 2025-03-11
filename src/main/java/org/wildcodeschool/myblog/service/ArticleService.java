@@ -1,7 +1,9 @@
 package org.wildcodeschool.myblog.service;
 
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
+import org.wildcodeschool.myblog.dto.ArticleCreateDTO;
 import org.wildcodeschool.myblog.dto.ArticleDTO;
 import org.wildcodeschool.myblog.exception.MaxLengthExceededException;
 import org.wildcodeschool.myblog.exception.ResourceNotFoundException;
@@ -52,7 +54,8 @@ public class ArticleService {
         return articleMapper.convertToDTO(article);
     }
 
-    public ArticleDTO createArticle(@RequestBody Article article) {
+    public ArticleDTO createArticle(@Valid @RequestBody ArticleCreateDTO articleCreateDTO) {
+        Article article = articleMapper.convertToEntitie(articleCreateDTO);
         article.setCreatedAt(LocalDateTime.now());
         article.setUpdatedAt(LocalDateTime.now());
         if (article.getTitle().length() > 50) {
